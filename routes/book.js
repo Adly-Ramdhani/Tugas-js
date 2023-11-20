@@ -8,6 +8,10 @@ const {
     deletBook
 } = require('../controllers/BookController')
 
+// router .get('./search', search)
+
+// router .get('./sort', sortBy)
+
 //untuk menampilkan data
 router.get('/',getBooks)
 

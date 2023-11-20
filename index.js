@@ -2,8 +2,11 @@ const express = require('express')
 const mysql = require('mysql2')
 const bookRoutes = require('./routes/book')
 const authorRoutes = require('./routes/author')
+const authRouter = require('./routes/auth')
 const dbConfig = require('./config/database')
 const pool = mysql.createPool(dbConfig)
+const authenticateJWT = require('./middleware/auth')
+const cors = require('cors')
 
 
 pool.on('error', (err) => {
@@ -13,6 +16,7 @@ pool.on('error', (err) => {
 const app = express()
 const PORT = 8000
 
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({
      extended: true
@@ -28,8 +32,8 @@ app.get('/contohparam', (req,res) => {
 })
 
 app.get('./',(req,res) => {res.write('hellow word'); res.end()})
-
-app.use('/book', bookRoutes)
+app.use('/auth', authRouter)
+app.use('/book',authenticateJWT, bookRoutes)
 app.use('/author', authorRoutes)
 
 app.listen(PORT, () => {
